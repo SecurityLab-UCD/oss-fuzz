@@ -156,10 +156,11 @@ else
       FFMPEG_BUILD_ARGS=''
 fi
 
-# ! add Pass before building the fazzers
+# ! add Pass before building the fuzzers
+# todo: use reporter.*.o object file instead of shared library
 export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/reporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/reporter.so $REPORT_FLAGS"
+export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/libreporter.so -lstdc++ -lm $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
 
 PKG_CONFIG_PATH="$FFMPEG_DEPS_PATH/lib/pkgconfig" ./configure \
         --cc=$CC --cxx=$CXX --ld="$CXX $CXXFLAGS -std=c++11" \
