@@ -68,13 +68,14 @@ cp $REPORT_PASS/*.so $DEST_DIR/lib/ || fatal "cp $REPORT_PASS/*.so $DEST_DIR/lib
 
 # Build once to get the list of dynamic lib paths, and copy them over
 
-REPORT_FLAGS="-Xclang -load -Xclang $DEST_DIR/lib/libReportPass.so -flegacy-pass-manager"
+REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
 export CC="$CC $REPORT_FLAGS"
 
 # Build a second time to build the final binary with correct rpath
+# todo: use reporter.*.o object file instead of shared library
 ../configure --disable-werror --cc="$CC" --cxx="$CXX" --enable-fuzzing \
     --prefix="/opt/qemu-oss-fuzz" \
-    --extra-cflags="$EXTRA_CFLAGS" --extra-ldflags="-Wl,-rpath,\$ORIGIN/lib $DEST_DIR/lib/reporter.so" \
+    --extra-cflags="$EXTRA_CFLAGS" --extra-ldflags="-Wl,-rpath,\$ORIGIN/lib $DEST_DIR/lib/libreporter.so -lstdc++" \
     --target-list="i386-softmmu"
 make "-j$(nproc)" qemu-fuzz-i386 V=1
 
