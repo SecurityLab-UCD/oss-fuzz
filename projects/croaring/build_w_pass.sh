@@ -14,15 +14,13 @@
 # limitations under the License.
 #
 ################################################################################
+# ! add Pass before building the fazzers
+export REPORT_FLAGS="-Xclang -load -Xclang /src/croaring/ReportFunctionExecutedPass/libreporter.so -flegacy-pass-manager"
+export CFLAGS="$CFLAGS /src/croaring/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/croaring/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
 
 mkdir build-dir && cd build-dir
 cmake -DENABLE_ROARING_TESTS=OFF ..
-
-# ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang ../ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-
 
 make -j$(nproc)
 

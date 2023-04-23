@@ -15,12 +15,12 @@
 #
 ################################################################################
 
-make -j$(nproc) cmake_build
-
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang /src/cmark/ReportFunctionExecutedPass/reporter.stdc++.o -flegacy-pass-manager"
+export CFLAGS="$CFLAGS /src/cmark/ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/cmark/ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
+
+make -j$(nproc) cmake_build
 
 $CC $CFLAGS -Isrc -Ibuild/src -c test/cmark-fuzz.c -o cmark_fuzzer.o
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE cmark_fuzzer.o build/src/libcmark.a -o $OUT/cmark_fuzzer

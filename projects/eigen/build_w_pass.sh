@@ -14,16 +14,16 @@
 # limitations under the License.
 #
 ################################################################################
+# ! add Pass before building the project
+export REPORT_FLAGS="-Xclang -load -Xclang /src/eigen/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
+export CFLAGS="$CFLAGS /src/eigen/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/eigen/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
 
 # build project
 mkdir build_dir && cd build_dir
 cmake ..
 make install
 cd ..
-# ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
 
 # build fuzzers
 for fuzzers in $(find $SRC -name '*_fuzzer.cc'); do

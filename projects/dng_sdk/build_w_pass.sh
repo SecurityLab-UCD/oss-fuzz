@@ -15,17 +15,16 @@
 #
 ################################################################################
 
+# ! add Pass before building the fazzers
+export REPORT_FLAGS="-Xclang -load -Xclang ../ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
+export CFLAGS="$CFLAGS ../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS ../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
 
 # compile source
 cd ./source
 rm dng_xmp*
 find . -name "*.cpp" -exec $CXX $CXXFLAGS -DqDNGUseLibJPEG=1 -DqDNGUseXMP=0 -DqDNGThreadSafe=1 -c {} \;
 ar cr libdns_sdk.a *.o
-
-# ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang ../ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
 
 # compile fuzzer
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE ../fuzzer/dng_parser_fuzzer.cpp -o $OUT/dng_parser_fuzzer \

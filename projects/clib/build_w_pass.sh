@@ -15,14 +15,13 @@
 #
 ################################################################################
 
+# ! add Pass before building the fazzers
+export REPORT_FLAGS="-Xclang -load -Xclang /src/clib/ReportFunctionExecutedPass/reporter.c++.o -flegacy-pass-manager"
+export CFLAGS="$CFLAGS /src/clib/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/clib/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+
 cd clib
 make -j$(nproc)
-
-# ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
-
 
 sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
 sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
