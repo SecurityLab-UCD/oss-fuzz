@@ -30,17 +30,16 @@ cat scripts/pnglibconf.dfa | \
 > scripts/pnglibconf.dfa.temp
 mv scripts/pnglibconf.dfa.temp scripts/pnglibconf.dfa
 
+# Add flags
+export REPORT_FLAGS="-Xclang -load -Xclang /src/libpng/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS /src/libpng/ReportFunctionExecutedPass/reporter.c++.o -lc++ -pthread -lm"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS /src/libpng/ReportFunctionExecutedPass/reporter.c++.o -pthread -lm"
+
 # build the libpng library.
 autoreconf -f -i
 ./configure --with-libpng-prefix=OSS_FUZZ_
 make -j$(nproc) clean
 make -j$(nproc) libpng16.la
-
-# Add flags
-export REPORT_FLAGS="-Xclang -load -Xclang /src/libpng/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-# Might not need the CFLAGS since it doesn't look like any C files are being compiled
-export CFLAGS="${CFLAGS:=} $REPORT_FLAGS /src/libpng/ReportFunctionExecutedPass/reporter.c++.o -lc++ -pthread -lm"
-export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS /src/libpng/ReportFunctionExecutedPass/reporter.c++.o -pthread -lm"
 
 # build libpng_read_fuzzer.
 $CXX $CXXFLAGS -std=c++11 -I. \
