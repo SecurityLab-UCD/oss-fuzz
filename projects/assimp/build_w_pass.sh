@@ -22,7 +22,7 @@ cmake CMakeLists.txt -G "Ninja" -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_ZLIB=ON \
                                 -DASSIMP_BUILD_SAMPLES=OFF
                                  
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
 REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
 export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
