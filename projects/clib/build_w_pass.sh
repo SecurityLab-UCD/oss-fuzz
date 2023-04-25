@@ -16,9 +16,10 @@
 ################################################################################
 
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/clib/ReportFunctionExecutedPass/reporter.c++.o -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/clib/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/clib/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
 cd clib
 make -j$(nproc)
@@ -42,6 +43,3 @@ $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_manifest.o \
 
 echo "[libfuzzer]" > $OUT/fuzz_manifest.options
 echo "detect_leaks=0" >> $OUT/fuzz_manifest.options
-
-# ! mv Pass to out since using relative path
-mv $REPORT_PASS $OUT

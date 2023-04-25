@@ -17,19 +17,14 @@
 
 mkdir my_build
 
-echo "++++++++++++%%%%%%%%%%%&&&&&&&&&&&&& $(pwd)"
-ls .
-ls ./ReportFunctionExecutedPass
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/coturn/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/coturn/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/coturn/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
 pushd my_build/
 
-echo "++++++++++++%%%%%%%%%%%&&&&&&&&&&&&& $(pwd)"
-ls .
-ls ..
 cmake -DFUZZER=ON -DLIB_FUZZING_ENGINE="$LIB_FUZZING_ENGINE" \
     -DCMAKE_EXE_LINKER_FLAGS="-Wl,-rpath,'\$ORIGIN/lib'" -DWITH_MYSQL=OFF -Wno-dev ../.
 make -j$(nproc)

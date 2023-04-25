@@ -16,9 +16,10 @@
 ################################################################################
 
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/cmark/ReportFunctionExecutedPass/reporter.stdc++.o -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/cmark/ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/cmark/ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager -fPIC"
+REPORTER_FLAGS="$REPORT_PASS/libreporter.so -lc++ -pthread -lm -fPIC"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
 make -j$(nproc) cmake_build
 
@@ -34,5 +35,5 @@ python3 test/spec_tests.py --fuzz-corpus corpus --spec test/regression.txt
 python3 test/spec_tests.py --fuzz-corpus corpus --spec test/smart_punct.txt
 zip -j $OUT/cmark_fuzzer_seed_corpus.zip corpus/*
 
-# ! mv Pass to out since using relative path
+# # ! mv Pass to out since using relative path
 mv $REPORT_PASS $OUT

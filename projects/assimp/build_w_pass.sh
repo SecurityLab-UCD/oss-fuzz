@@ -22,9 +22,10 @@ cmake CMakeLists.txt -G "Ninja" -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_ZLIB=ON \
                                 -DASSIMP_BUILD_SAMPLES=OFF
                                  
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/assimp/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
 cmake --build .
 
@@ -32,6 +33,3 @@ cmake --build .
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE -std=c++11 -I$SRC/assimp/include \
 		fuzz/assimp_fuzzer.cc -o $OUT/assimp_fuzzer  \
 		./lib/libassimp.a ./contrib/zlib/libzlibstatic.a
-
-# ! mv Pass to out since using relative path
-mv $REPORT_PASS $OUT

@@ -25,13 +25,10 @@ cd ${WORK}
 # would report leaks and error out.
 export ASAN_OPTIONS="detect_leaks=0"
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-echo "++++++++++++%%%%%%%%%%%&&&&&&&&&&&&& $(pwd)"
-ls ..
-
-export CFLAGS="$CFLAGS ../ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ../ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-
+export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager -fPIC"
+REPORTER_FLAGS="$REPORT_PASS/libreporter.so -lc++ -pthread -lm -fPIC"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
 cmake ${ARROW} -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
@@ -73,5 +70,5 @@ cp -a release/* ${OUT}
 
 ${ARROW}/build-support/fuzzing/generate_corpuses.sh ${OUT}
 
-# ! mv Pass to out since using relative path
+# # ! mv Pass to out since using relative path
 mv $REPORT_PASS $OUT

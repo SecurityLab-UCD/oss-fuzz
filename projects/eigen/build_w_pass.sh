@@ -15,9 +15,11 @@
 #
 ################################################################################
 # ! add Pass before building the project
-export REPORT_FLAGS="-Xclang -load -Xclang ../../../ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/eigen/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/eigen/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+
 
 # build project
 mkdir build_dir && cd build_dir
@@ -33,4 +35,4 @@ for fuzzers in $(find $SRC -name '*_fuzzer.cc'); do
 done
 
 # ! mv Pass to out since using relative path
-mv $REPORT_PASS $OUT
+# mv $REPORT_PASS $OUT
