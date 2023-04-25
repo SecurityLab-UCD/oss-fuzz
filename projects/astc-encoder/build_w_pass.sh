@@ -15,7 +15,7 @@
 #
 ################################################################################
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/astc-encoder/ReportFunctionExecutedPass/libreporter.so -flegacy-pass-manager"
+export REPORT_FLAGS="-Xclang -load -Xclang /src/astc-encoder/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
 export CFLAGS="$CFLAGS /src/astc-encoder/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
 export CXXFLAGS="$CXXFLAGS /src/astc-encoder/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
 

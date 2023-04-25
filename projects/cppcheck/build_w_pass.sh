@@ -17,8 +17,8 @@
 
 # ! add Pass before building the fazzers
 export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ./ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ./ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
+export CFLAGS="$CFLAGS /src/cppcheck/ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/cppcheck/ReportFunctionExecutedPass/reporter.stdc++.o $REPORT_FLAGS"
 
 # build fuzzer
 

@@ -15,9 +15,9 @@
 #
 ################################################################################
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/croaring/ReportFunctionExecutedPass/libreporter.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/croaring/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/croaring/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang /src/croaring/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
+export CFLAGS="$CFLAGS /src/croaring/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/croaring/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
 
 mkdir build-dir && cd build-dir
 cmake -DENABLE_ROARING_TESTS=OFF ..
@@ -41,6 +41,3 @@ $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzzer_cc.o   \
 
 zip $OUT/croaring_fuzzer_seed_corpus.zip $SRC/croaring/tests/testdata/*bin
 cp $SRC/croaring/tests/testdata/*bin $OUT/
-
-# ! mv Pass to out since using relative path
-mv $REPORT_PASS $OUT

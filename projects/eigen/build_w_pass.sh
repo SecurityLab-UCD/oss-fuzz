@@ -15,9 +15,9 @@
 #
 ################################################################################
 # ! add Pass before building the project
-export REPORT_FLAGS="-Xclang -load -Xclang /src/eigen/ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/eigen/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/eigen/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang ../../../ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
+export CFLAGS="$CFLAGS /src/eigen/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS /src/eigen/ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
 
 # build project
 mkdir build_dir && cd build_dir

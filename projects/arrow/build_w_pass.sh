@@ -25,9 +25,12 @@ cd ${WORK}
 # would report leaks and error out.
 export ASAN_OPTIONS="detect_leaks=0"
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/arrow/ReportFunctionExecutedPass/libreporter.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/arrow/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/arrow/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export REPORT_FLAGS="-Xclang -load -Xclang ./ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
+echo "++++++++++++%%%%%%%%%%%&&&&&&&&&&&&& $(pwd)"
+ls ..
+
+export CFLAGS="$CFLAGS ../ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
+export CXXFLAGS="$CXXFLAGS ../ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
 
 
 cmake ${ARROW} -GNinja \
