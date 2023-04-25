@@ -37,7 +37,7 @@ export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS /src/libpng/ReportFunctionExecutedP
 
 # build the libpng library.
 autoreconf -f -i
-./configure --with-libpng-prefix=OSS_FUZZ_
+./configure --with-libpng-prefix=OSS_FUZZ_ LD=clang
 make -j$(nproc) clean
 make -j$(nproc) libpng16.la
 
@@ -53,4 +53,5 @@ find $SRC/libpng -name "*.png" | grep -v crashers | \
 
 cp $SRC/libpng/contrib/oss-fuzz/*.dict \
      $SRC/libpng/contrib/oss-fuzz/*.options $OUT/
+
 
