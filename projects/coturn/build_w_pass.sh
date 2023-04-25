@@ -44,6 +44,3 @@ pushd /lib/x86_64-linux-gnu/
 mkdir $OUT/lib/
 cp libevent* $OUT/lib/.
 popd
-
-# ! mv Pass to out since using relative path
-mv $REPORT_PASS $OUT

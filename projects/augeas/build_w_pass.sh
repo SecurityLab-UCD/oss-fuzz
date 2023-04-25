@@ -16,13 +16,15 @@
 #
 ################################################################################
 
-# ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang /src/augeas/ReportFunctionExecutedPass/libreporter.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS /src/augeas/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS /src/augeas/ReportFunctionExecutedPass/libreporter.so $REPORT_FLAGS"
-
 ./autogen.sh
 ./configure --enable-static --disable-shared --without-selinux
+
+# ! add Pass before building the fazzers
+REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+
 make -j$(nproc)
 
 sed -i '31 i\#ifdef __cplusplus'\\n'\extern "C" {'\\n'\#endif'\\n src/fa.h
@@ -41,6 +43,3 @@ for fuzzer in augeas_api_fuzzer augeas_escape_name_fuzzer augeas_fa_fuzzer; do
         src/.libs/libaugeas.a src/.libs/libfa.a ./gnulib/lib/.libs/libgnu.a \
         /usr/lib/x86_64-linux-gnu/libxml2.a
 done
-
-# ! mv Pass to out since using relative path
-mv $REPORT_PASS $OUT

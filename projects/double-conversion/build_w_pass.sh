@@ -23,14 +23,10 @@ cmake -GNinja ${SRC}/double-conversion/
 ninja
 
 # ! add Pass before building the fazzers
-echo "+++++@@@@@@@@@@+++++++++++++@@@@@@@@@@@++++++++"
-echo "Current path: $(pwd)"
-ls -d */
-ls .. -d
-ls ../.. -d
-export REPORT_FLAGS="-Xclang -load -Xclang ../../ReportFunctionExecutedPass/libReportPass.so -flegacy-pass-manager"
-export CFLAGS="$CFLAGS ../../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
-export CXXFLAGS="$CXXFLAGS ../../ReportFunctionExecutedPass/reporter.c++.o $REPORT_FLAGS"
+REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$REPORT_PASS/reporter.c++.o -lc++ -pthread -lm"
+export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
+export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
 fuzzer="string_to_double_fuzzer"
 
