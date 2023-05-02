@@ -16,8 +16,12 @@
 ################################################################################
 
 # ! add Pass before building the fazzers
-export REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager -fPIC"
-REPORTER_FLAGS="$REPORT_PASS/libreporter.so -lc++ -pthread -lm -fPIC"
+
+mkdir -p $OUT/lib
+cp $REPORT_PASS/libreporter.so $OUT/lib
+
+REPORT_FLAGS="-Xclang -load -Xclang $REPORT_PASS/libReportPass.so -flegacy-pass-manager"
+REPORTER_FLAGS="$OUT/lib/libreporter.so"
 export CFLAGS="${CFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 export CXXFLAGS="${CXXFLAGS:=} $REPORT_FLAGS $REPORTER_FLAGS"
 
