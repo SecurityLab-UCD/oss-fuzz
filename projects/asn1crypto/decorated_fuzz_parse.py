@@ -20,7 +20,7 @@ from asn1crypto import parser
 
 from py_io_capture import decorate_module, dump_records, DUMP_FILE_NAME
 import atexit
-asn1crypto = decorate_module(asn1crypto)
+parser = decorate_module(parser)
 atexit.register(dump_records, DUMP_FILE_NAME)
 
 def TestOneInput(data):
